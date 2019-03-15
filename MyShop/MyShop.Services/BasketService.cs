@@ -23,7 +23,7 @@ namespace MyShop.Services
             this.basketContext = BasketContext;
         }
 
-        private Basket GetBasket(HttpContext httpContext, bool createIfNull)
+        private Basket GetBasket(HttpContextBase httpContext, bool createIfNull)
         {
             HttpCookie cookie = httpContext.Request.Cookies.Get(BasketSessionName);
 
@@ -55,7 +55,7 @@ namespace MyShop.Services
             return basket;
         }
 
-        private Basket CreateNewBasket(HttpContext httpContext)
+        private Basket CreateNewBasket(HttpContextBase httpContext)
         {
             Basket basket = new Basket();
             basketContext.Insert(basket);
@@ -69,7 +69,7 @@ namespace MyShop.Services
             return basket;
         }
 
-        public void AddToBasket(HttpContext httpContext, string productId)
+        public void AddToBasket(HttpContextBase httpContext, string productId)
         {
             Basket basket = GetBasket(httpContext, true);
             BasketItem item = basket.BasketItems.FirstOrDefault(i => i.ProductId == productId);
@@ -93,7 +93,7 @@ namespace MyShop.Services
             basketContext.Commit();
         }
 
-        public void RemoveFromBasket(HttpContext httpContext, string itemId)
+        public void RemoveFromBasket(HttpContextBase httpContext, string itemId)
         {
             Basket basket = GetBasket(httpContext, true);
             BasketItem item = basket.BasketItems.FirstOrDefault(i => i.Id == itemId);
@@ -105,7 +105,7 @@ namespace MyShop.Services
             }
         }
 
-        public List<BasketItemViewModel> GetBasketItems (HttpContext httpContext)
+        public List<BasketItemViewModel> GetBasketItems (HttpContextBase httpContext)
         {
             Basket basket = GetBasket(httpContext, false);
 
@@ -129,7 +129,7 @@ namespace MyShop.Services
                 return new List<BasketItemViewModel>();
             }
         }
-        public BasketSummaryViewModel GetBasketSummary(HttpContext httpContext)
+        public BasketSummaryViewModel GetBasketSummary(HttpContextBase httpContext)
         {
             Basket basket = GetBasket(httpContext, false);
             BasketSummaryViewModel model = new BasketSummaryViewModel(0, 0);
